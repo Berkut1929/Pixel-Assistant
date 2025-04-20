@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пиксельная мастерская</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --main-color: #7d5a9e;
+            --secondary-color: #b399cc;
+            --light-color: #e8d5f0;
+            --dark-color: #5a4a6a;
+            --accent-color: #ff9eb7;
+            --success-color: #8bd49c;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #f0e6f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(216, 191, 236, 0.3) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 158, 183, 0.3) 0%, transparent 20%);
+            min-height: 100vh;
+        }
+        
+        @font-face {
+            font-family: 'Press Start 2P';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        }
+        
+        h1 {
+            color: var(--main-color);
+            text-shadow: 3px 3px 0px var(--secondary-color);
+            font-size: 28px;
+            margin-bottom: 40px;
+            image-rendering: pixelated;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--main-color), var(--accent-color));
+            image-rendering: pixelated;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 1000px;
+        }
+        
+        .panel {
+            background-color: var(--light-color);
+            border: 4px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 6px 6px 0px rgba(179, 153, 204, 0.5);
+            image-rendering: pixelated;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+        }
+        
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--accent-color), var(--main-color), var(--success-color));
+            opacity: 0.3;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--main-color);
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .panel-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+            image-rendering: pixelated;
+        }
+        
+        .display {
+            background-color: #f8f2ff;
+            border: 3px solid var(--secondary-color);
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Press Start 2P', cursive;
+            color: var(--dark-color);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 3px 3px 5px rgba(0,0,0,0.1);
+        }
+        
+        .display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%, rgba(255,255,255,0.3) 100%);
+            pointer-events: none;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            border: 3px solid var(--main-color);
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: all 0.2s;
+            image-rendering: pixelated;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            flex-grow: 1;
+            min-width: 80px;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--main-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+        }
+        
+        button:hover::before {
+            transform: translateX(100%);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+        
+        .primary-btn {
+            background-color: var(--accent-color);
+            border-color: #e87d9e;
+            color: #fff;
+        }
+        
+        .success-btn {
+            background-color: var(--success-color);
+            border-color: #5aa66e;
+            color: #fff;
+        }
+        
+        input {
+            background-color: #f8f2ff;
+            border: 3px solid var(--secondary-color);
+            border-radius: 6px;
+            padding: 10px;
+            font-family: 'Press Start 2P', cursive;
+            color: var(--dark-color);
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 12px;
+            text-align: center;
+            image-rendering: pixelated;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px rgba(255, 158, 183, 0.5);
+        }
+        
+        .range-container {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            margin-top: 5px;
+            color: var(--dark-color);
+        }
+        
+        .pixel-divider {
+            height: 4px;
+            background-color: var(--secondary-color);
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .pixel-divider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: var(--light-color);
+            border: 3px solid transparent;
+            border-bottom: none;
+            font-size: 10px;
+            position: relative;
+            bottom: -3px;
+        }
+        
+        .tab.active {
+            background-color: #f8f2ff;
+            border-color: var(--secondary-color);
+            border-bottom-color: #f8f2ff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .history-item {
+            background-color: rgba(255,255,255,0.5);
+            padding: 5px;
+            margin: 5px 0;
+            border-left: 3px solid var(--accent-color);
+            font-size: 10px;
+        }
+        
+        .decoration {
+            position: fixed;
+            z-index: -1;
+            image-rendering: pixelated;
+            opacity: 0.6;
+        }
+        
+        /* Анимации */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .float {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Дополнительные элементы интерфейса */
+        .badge {
+            display: inline-block;
+            padding: 3px 6px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 8px;
+            border-radius: 3px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 10px;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>✦ ПИКСЕЛЬНАЯ МАСТЕРСКАЯ ✦</h1>
+    
+    <div class="container">
+        <!-- Рандомайзер с расширенными функциями -->
+        <div class="panel pulse">
+            <h2 class="panel-title">🎲 МЕГА РАНДОМАЙЗЕР <span class="badge">NEW</span></h2>
+            <div class="display" id="randomNumber">0</div>
+            
+            <div class="tab-container">
+                <div class="tab active" onclick="switchTab(event, 'random-basic')">Основной</div>
+                <div class="tab" onclick="switchTab(event, 'random-advanced')">Продвинутый</div>
+                <div class="tab" onclick="switchTab(event, 'random-history')">История</div>
+            </div>
+            
+            <div id="random-basic" class="tab-content active">
+                <div class="range-container">
+                    <input type="range" id="randomRange" min="0" max="100" value="50" class="slider">
+                    <div class="range-labels">
+                        <span>0</span>
+                        <span>50</span>
+                        <span>100</span>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button onclick="generateRandom(1, 100)">1-100</button>
+                    <button onclick="generateRandom(1, 10)">1-10</button>
+                    <button onclick="generateRandom(1, 1000)">1-1000</button>
+                </div>
+                
+                <div class="pixel-divider"></div>
+                
+                <div class="controls">
+                    <button class="primary-btn" onclick="generateCustomRandom()">Сгенерировать</button>
+                </div>
+            </div>
+            
+            <div id="random-advanced" class="tab-content">
+                <input type="number" id="minValue" placeholder="Мин" value="1">
+                <input type="number" id="maxValue" placeholder="Макс" value="100">
+                
+                <div class="pixel-divider"></div>
+                
+                <div class="controls">
+                    <button onclick="generateRandomFloat()">Дробное</button>
+                    <button onclick="generateRandomFromList()">Из списка</button>
+                </div>
+                
+                <div class="pixel-divider"></div>
+                
+                <input type="text" id="customList" placeholder="Введите значения через запятую" value="Яблоко, Груша, Банан">
+                
+                <div class="controls">
+                    <button class="success-btn" onclick="generateRandomFromCustomList()">Из моего списка</button>
+                </div>
+            </div>
+            
+            <div id="random-history" class="tab-content">
+                <div id="randomHistory"></div>
+                <div class="controls">
+                    <button onclick="clearHistory()">Очистить</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Секундомер с крутыми функциями -->
+        <div class="panel">
+            <h2 class="panel-title">⏱️ ПРО СЕКУНДОМЕР <span class="badge">PRO</span></h2>
+            <div class="display" id="stopwatch">00:00:00.00</div>
+            
+            <div class="controls">
+                <button class="primary-btn" onclick="startStopwatch()">Старт</button>
+                <button onclick="pauseStopwatch()">Пауза</button>
+                <button onclick="lapStopwatch()">Круг</button>
+                <button onclick="resetStopwatch()">Сброс</button>
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div id="lapTimes" style="max-height: 100px; overflow-y: auto; font-size: 10px;"></div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div class="controls">
+                <button onclick="changeTheme('purple')">Фиолетовый</button>
+                <button onclick="changeTheme('pink')">Розовый</button>
+                <button onclick="changeTheme('green')">Зеленый</button>
+            </div>
+        </div>
+        
+        <!-- Таймер с доп. функциями -->
+        <div class="panel">
+            <h2 class="panel-title">⏰ УМНЫЙ ТАЙМЕР <span class="badge">AI</span></h2>
+            <div class="display" id="timer">00:00:00</div>
+            
+            <div class="controls">
+                <input type="number" id="hours" placeholder="Ч" min="0" value="0" style="width: 50px;">
+                <input type="number" id="minutes" placeholder="М" min="0" max="59" value="10" style="width: 50px;">
+                <input type="number" id="seconds" placeholder="С" min="0" max="59" value="0" style="width: 50px;">
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div class="controls">
+                <button class="primary-btn" onclick="startTimer()">Старт</button>
+                <button onclick="stopTimer()">Стоп</button>
+                <button onclick="setTimer()">Установить</button>
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div class="controls">
+                <button onclick="presetTimer(300)">5 мин</button>
+                <button onclick="presetTimer(600)">10 мин</button>
+                <button onclick="presetTimer(1800)">30 мин</button>
+                <button onclick="presetTimer(3600)">1 час</button>
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div class="tooltip" style="width: 100%; text-align: center;">
+                <button onclick="showTimerNotification()" style="width: 100%;">Тест уведомления</button>
+                <span class="tooltiptext">Проверить как будет выглядеть уведомление</span>
+            </div>
+        </div>
+        
+        <!-- Новый блок - Генератор паролей -->
+        <div class="panel">
+            <h2 class="panel-title">🔐 ГЕНЕРАТОР ПАРОЛЕЙ</h2>
+            <div class="display" id="password">P@ssw0rd!</div>
+            
+            <div class="range-container">
+                <label for="passwordLength">Длина: <span id="lengthValue">12</span></label>
+                <input type="range" id="passwordLength" min="4" max="32" value="12" class="slider">
+            </div>
+            
+            <div class="controls">
+                <button onclick="generatePassword()">Сгенерировать</button>
+                <button onclick="copyPassword()">Копировать</button>
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div>
+                <input type="checkbox" id="uppercase" checked>
+                <label for="uppercase">A-Z</label>
+                
+                <input type="checkbox" id="lowercase" checked>
+                <label for="lowercase">a-z</label>
+                
+                <input type="checkbox" id="numbers" checked>
+                <label for="numbers">0-9</label>
+                
+                <input type="checkbox" id="symbols" checked>
+                <label for="symbols">!@#$</label>
+            </div>
+        </div>
+        
+        <!-- Новый блок - Генератор цветов -->
+        <div class="panel">
+            <h2 class="panel-title">🎨 ГЕНЕРАТОР ЦВЕТОВ</h2>
+            <div class="display" id="colorDisplay" style="height: 80px; background: linear-gradient(90deg, red, yellow, green, blue, purple);"></div>
+            
+            <div class="controls">
+                <button onclick="generateRandomColor()">Случайный</button>
+                <button onclick="copyColor()">Копировать</button>
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div id="colorValue" style="text-align: center; font-size: 12px; word-break: break-all;">#FFFFFF</div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div class="controls">
+                <button onclick="generateGradient()">Градиент</button>
+                <button onclick="generatePastel()">Пастельный</button>
+                <button onclick="generateDark()">Темный</button>
+            </div>
+        </div>
+        
+        <!-- Новый блок - Игра "Угадай число" -->
+        <div class="panel">
+            <h2 class="panel-title">🔢 УГАДАЙ ЧИСЛО</h2>
+            <div class="display" id="guessDisplay">1-100</div>
+            
+            <div class="controls">
+                <input type="number" id="userGuess" placeholder="Ваше число" style="width: 100%;">
+            </div>
+            
+            <div class="controls">
+                <button class="primary-btn" onclick="checkGuess()">Проверить</button>
+                <button onclick="startNewGame()">Новая игра</button>
+            </div>
+            
+            <div class="pixel-divider"></div>
+            
+            <div id="guessResult" style="text-align: center; font-size: 12px; min-height: 30px;"></div>
+            
+            <div id="guessHistory" style="font-size: 10px;"></div>
+        </div>
+    </div>
+    
+    <!-- Декоративные элементы -->
+    <div class="decoration float" style="top: 10%; left: 5%; width: 30px; height: 30px; background-color: var(--accent-color); border-radius: 50%;"></div>
+    <div class="decoration" style="top: 80%; left: 90%; width: 40px; height: 40px; background-color: var(--success-color); transform: rotate(45deg);"></div>
+    <div class="decoration float" style="top: 30%; right: 5%; width: 25px; height: 25px; background-color: var(--main-color); border-radius: 50%;"></div>
+    <div class="decoration" style="bottom: 10%; left: 10%; width: 50px; height: 50px; background: linear-gradient(45deg, var(--accent-color), var(--main-color)); transform: rotate(45deg);"></div>
+    
+    <audio id="timerSound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3" preload="auto"></audio>
+    
+    <script>
+        // Глобальные переменные
+        let randomHistory = [];
+        let lapTimes = [];
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        let guessAttempts = 0;
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            generatePassword();
+            generateRandomColor();
+            startNewGame();
+            updateRangeValue();
+            
+            // Инициализация слайдера
+            document.getElementById('randomRange').addEventListener('input', updateRangeValue);
+            document.getElementById('passwordLength').addEventListener('input', function() {
+                document.getElementById('lengthValue').textContent = this.value;
+            });
+        });
+        
+        // Общие функции
+        function playClickSound() {
+            const sound = document.getElementById('clickSound');
+            sound.currentTime = 0;
+            sound.play();
+        }
+        
+        function switchTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+            playClickSound();
+        }
+        
+        function updateRangeValue() {
+            const value = document.getElementById('randomRange').value;
+            document.getElementById('minValue').value = 0;
+            document.getElementById('maxValue').value = value;
+        }
+        
+        function changeTheme(theme) {
+            const root = document.documentElement;
+            
+            switch(theme) {
+                case 'purple':
+                    root.style.setProperty('--main-color', '#7d5a9e');
+                    root.style.setProperty('--secondary-color', '#b399cc');
+                    root.style.setProperty('--accent-color', '#ff9eb7');
+                    break;
+                case 'pink':
+                    root.style.setProperty('--main-color', '#d35d6e');
+                    root.style.setProperty('--secondary-color', '#e8a3b3');
+                    root.style.setProperty('--accent-color', '#ffd166');
+                    break;
+                case 'green':
+                    root.style.setProperty('--main-color', '#4a9b79');
+                    root.style.setProperty('--secondary-color', '#8bd49c');
+                    root.style.setProperty('--accent-color', '#ff9eb7');
+                    break;
+            }
+            
+            playClickSound();
+        }
+        
+        // Рандомайзер
+        function generateRandom(min, max) {
+            const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            displayRandomResult(randomNum);
+            addToHistory(randomNum);
+        }
+        
+        function generateCustomRandom() {
+            const min = parseInt(document.getElementById('minValue').value) || 0;
+            const max = parseInt(document.getElementById('maxValue').value) || 100;
+            generateRandom(min, max);
+        }
+        
+        function generateRandomFloat() {
+            const min = parseInt(document.getElementById('minValue').value) || 0;
+            const max = parseInt(document.getElementById('maxValue').value) || 100;
+            const randomNum = (Math.random() * (max - min) + min).toFixed(2);
+            displayRandomResult(randomNum);
+            addToHistory(randomNum);
+        }
+        
+        function generateRandomFromList() {
+            const items = ['Яблоко', 'Груша', 'Банан', 'Апельсин', 'Киви', 'Манго'];
+            const randomItem = items[Math.floor(Math.random() * items.length)];
+            displayRandomResult(randomItem);
+            addToHistory(randomItem);
+        }
+        
+        function generateRandomFromCustomList() {
+            const listStr = document.getElementById('customList').value;
+            const items = listStr.split(',').map(item => item.trim()).filter(item => item);
+            
+            if (items.length === 0) {
+                displayRandomResult("Введите список");
+                return;
+            }
+            
+            const randomItem = items[Math.floor(Math.random() * items.length)];
+            displayRandomResult(randomItem);
+            addToHistory(randomItem);
+        }
+        
+        function displayRandomResult(result) {
+            const display = document.getElementById('randomNumber');
+            display.textContent = result;
+            
+            // Анимация
+            display.style.transform = 'scale(1.1)';
+            display.style.color = 'var(--accent-color)';
+            display.style.backgroundColor = '#fff';
+            
+            setTimeout(() => {
+                display.style.transform = 'scale(1)';
+                display.style.color = 'var(--dark-color)';
+                display.style.backgroundColor = '#f8f2ff';
+            }, 300);
+            
+            playClickSound();
+        }
+        
+        function addToHistory(item) {
+            randomHistory.unshift({
+                value: item,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            if (randomHistory.length > 10) {
+                randomHistory.pop();
+            }
+            
+            updateHistoryDisplay();
+        }
+        
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById('randomHistory');
+            historyContainer.innerHTML = '';
+            
+            randomHistory.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.textContent = `${index + 1}. ${item.value} (${item.time})`;
+                historyContainer.appendChild(div);
+            });
+        }
+        
+        function clearHistory() {
+            randomHistory = [];
+            updateHistoryDisplay();
+            playClickSound();
+        }
+        
+        // Секундомер
+        let stopwatchInterval;
+        let stopwatchTime = 0;
+        let stopwatchStartTime = 0;
+        let stopwatchRunning = false;
+        
+        function startStopwatch() {
+            if (!stopwatchRunning) {
+                stopwatchStartTime = Date.now() - stopwatchTime;
+                stopwatchInterval = setInterval(updateStopwatch, 10);
+                stopwatchRunning = true;
+            }
+            playClickSound();
+        }
+        
+        function pauseStopwatch() {
+            if (stopwatchRunning) {
+                clearInterval(stopwatchInterval);
+                stopwatchRunning = false;
+            }
+            playClickSound();
+        }
+        
+        function resetStopwatch() {
+            clearInterval(stopwatchInterval);
+            stopwatchTime = 0;
+            stopwatchRunning = false;
+            updateStopwatchDisplay();
+            lapTimes = [];
+            document.getElementById('lapTimes').innerHTML = '';
+            playClickSound();
+        }
+        
+        function lapStopwatch() {
+            if (stopwatchRunning) {
+                const lapTime = stopwatchTime;
+                lapTimes.unshift(formatTime(lapTime));
+                
+                if (lapTimes.length > 5) {
+                    lapTimes.pop();
+                }
+                
+                updateLapDisplay();
+            }
+            playClickSound();
+        }
+        
+        function updateStopwatch() {
+            stopwatchTime = Date.now() - stopwatchStartTime;
+            updateStopwatchDisplay();
+        }
+        
+        function updateStopwatchDisplay() {
+            document.getElementById('stopwatch').textContent = formatTime(stopwatchTime);
+        }
+        
+        function updateLapDisplay() {
+            const lapContainer = document.getElementById('lapTimes');
+            lapContainer.innerHTML = '';
+            
+            lapTimes.forEach((lap, index) => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.textContent = `Круг ${index + 1}: ${lap}`;
+                lapContainer.appendChild(div);
+            });
+        }
+        
+        function formatTime(ms) {
+            const date = new Date(ms);
+            const hours = date.getUTCHours().toString().padStart(2, '0');
+            const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+            const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+            const milliseconds = Math.floor(date.getUTCMilliseconds() / 10).toString().padStart(2, '0');
+            
+            return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+        }
+        
+        // Таймер
+        let timerInterval;
+        let timerTime = 0;
+        let timerRunning = false;
+        
+        function setTimer() {
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+            const seconds = parseInt(document.getElementById('seconds').value) || 0;
+            
+            timerTime = hours * 3600 + minutes * 60 + seconds;
+            updateTimerDisplay();
+            playClickSound();
+        }
+        
+        function presetTimer(seconds) {
+            timerTime = seconds;
+            updateTimerInputs();
+            updateTimerDisplay();
+            playClickSound();
+        }
+        
+        function updateTimerInputs() {
+            const hours = Math.floor(timerTime / 3600);
+            const minutes = Math.floor((timerTime % 3600) / 60);
+            const seconds = timerTime % 60;
+            
+            document.getElementById('hours').value = hours;
+            document.getElementById('minutes').value = minutes;
+            document.getElementById('seconds').value = seconds;
+        }
+        
+        function startTimer() {
+            if (timerTime <= 0) return;
+            
+            if (!timerRunning) {
+                timerInterval = setInterval(() => {
+                    if (timerTime > 0) {
+                        timerTime--;
+                        updateTimerDisplay();
+                        
+                        if (timerTime <= 0) {
+                            timerComplete();
+                        }
+                    }
+                }, 1000);
+                timerRunning = true;
+            }
+            playClickSound();
+        }
+        
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            playClickSound();
+        }
+        
+        function timerComplete() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.style.color = 'var(--accent-color)';
+            timerDisplay.style.backgroundColor = '#fff';
+            
+            // Воспроизведение звука
+            const sound = document.getElementById('timerSound');
+            sound.currentTime = 0;
+            sound.play();
+            
+            // Уведомление
+            showTimerNotification();
+            
+            setTimeout(() => {
+                timerDisplay.style.color = 'var(--dark-color)';
+                timerDisplay.style.backgroundColor = '#f8f2ff';
+            }, 2000);
+        }
+        
+        function showTimerNotification() {
+            if (Notification.permission === 'granted') {
+                new Notification('Таймер завершен!', {
+                    body: 'Установленное время истекло.',
+                    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ2YXIoLS1tYWluLWNvbG9yKSIgZD0iTTI1NiA4QzExOSA4IDggMTE5IDggMjU2czExMSAyNDggMjQ4IDI0OCAyNDgtMTExIDI0OC0yNDhTMzkzIDggMjU2IDh6bTAgNDQ4Yy0xMTAuNSAwLTIwMC04OS41LTIwMC0yMDBTMTQ1LjUgNTYgMjU2IDU2czIwMCA4OS41IDIwMCAyMDAtODkuNSAyMDAtMjAwIDIwMHptMTYwLTI5Mi4yTDI4NiAxNDIuN3YxMzAuNWg4Ni4xbC0yNS40IDI1LjRMMzQwLjggMjU2bC01My45IDUzLjkgMjUuNCAyNS40IDUzLjktNTMuOSA1My45IDUzLjkgMjUuNC0yNS40LTUzLjktNTMuOSA1My45LTUzLjktMjUuNC0yNS40eiIvPjwvc3ZnPg=='
+                });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        showTimerNotification();
+                    }
+                });
+            }
+            
+            // Fallback alert
+            if (Notification.permission !== 'granted') {
+                alert('Таймер завершен!');
+            }
+        }
+        
+        function updateTimerDisplay() {
+            const hours = Math.floor(timerTime / 3600);
+            const minutes = Math.floor((timerTime % 3600) / 60);
+            const seconds = timerTime % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Генератор паролей
+        function generatePassword() {
+            const length = document.getElementById('passwordLength').value;
+            const uppercase = document.getElementById('uppercase').checked;
+            const lowercase = document.getElementById('lowercase').checked;
+            const numbers = document.getElementById('numbers').checked;
+            const symbols = document.getElementById('symbols').checked;
+            
+            let charset = '';
+            if (uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (lowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+            if (numbers) charset += '0123456789';
+            if (symbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            if (charset === '') {
+                document.getElementById('password').textContent = 'Выберите параметры';
+                return;
+            }
+            
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            
+            document.getElementById('password').textContent = password;
+            playClickSound();
+        }
+        
+        function copyPassword() {
+            const password = document.getElementById('password').textContent;
+            navigator.clipboard.writeText(password).then(() => {
+                const passwordDisplay = document.getElementById('password');
+                passwordDisplay.textContent = 'Скопировано!';
+                
+                setTimeout(() => {
+                    passwordDisplay.textContent = password;
+                }, 1000);
+            });
+            playClickSound();
+        }
+        
+        // Генератор цветов
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            
+            document.getElementById('colorDisplay').style.background = color;
+            document.getElementById('colorValue').textContent = color;
+            playClickSound();
+        }
+        
+        function generateGradient() {
+            const color1 = getRandomHexColor();
+            const color2 = getRandomHexColor();
+            const gradient = `linear-gradient(45deg, ${color1}, ${color2})`;
+            
+            document.getElementById('colorDisplay').style.background = gradient;
+            document.getElementById('colorValue').textContent = `${color1} → ${color2}`;
+            playClickSound();
+        }
+        
+        function generatePastel() {
+            const hue = Math.floor(Math.random() * 360);
+            const color = `hsl(${hue}, 100%, 85%)`;
+            
+            document.getElementById('colorDisplay').style.background = color;
+            document.getElementById('colorValue').textContent = color;
+            playClickSound();
+        }
+        
+        function generateDark() {
+            const hue = Math.floor(Math.random() * 360);
+            const color = `hsl(${hue}, 70%, 30%)`;
+            
+            document.getElementById('colorDisplay').style.background = color;
+            document.getElementById('colorValue').textContent = color;
+            playClickSound();
+        }
+        
+        function getRandomHexColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            
+            return color;
+        }
+        
+        function copyColor() {
+            const color = document.getElementById('colorValue').textContent;
+            navigator.clipboard.writeText(color).then(() => {
+                const colorValue = document.getElementById('colorValue');
+                const originalText = colorValue.textContent;
+                colorValue.textContent = 'Скопировано!';
+                
+                setTimeout(() => {
+                    colorValue.textContent = originalText;
+                }, 1000);
+            });
+            playClickSound();
+        }
+        
+        // Игра "Угадай число"
+        function startNewGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            guessAttempts = 0;
+            document.getElementById('guessDisplay').textContent = '1-100';
+            document.getElementById('guessResult').textContent = '';
+            document.getElementById('guessHistory').innerHTML = '';
+            document.getElementById('userGuess').value = '';
+            playClickSound();
+        }
+        
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById('userGuess').value);
+            const guessResult = document.getElementById('guessResult');
+            const guessHistory = document.getElementById('guessHistory');
+            
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                guessResult.textContent = 'Введите число от 1 до 100';
+                guessResult.style.color = 'var(--accent-color)';
+                return;
+            }
+            
+            guessAttempts++;
+            
+            if (userGuess === secretNumber) {
+                guessResult.textContent = `Поздравляем! Вы угадали за ${guessAttempts} попыток`;
+                guessResult.style.color = 'var(--success-color)';
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.textContent = `${guessAttempts}. ${userGuess} - Победа!`;
+                guessHistory.appendChild(historyItem);
+                
+                document.getElementById('guessDisplay').textContent = secretNumber;
+            } else {
+                const hint = userGuess < secretNumber ? 'больше' : 'меньше';
+                guessResult.textContent = `Неверно! Загаданное число ${hint}`;
+                guessResult.style.color = 'var(--accent-color)';
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.textContent = `${guessAttempts}. ${userGuess} - ${hint}`;
+                guessHistory.appendChild(historyItem);
+            }
+            
+            document.getElementById('userGuess').value = '';
+            playClickSound();
+        }
+    </script>
+</body>
+</html>
